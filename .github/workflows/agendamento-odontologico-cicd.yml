@@ -32,16 +32,13 @@ jobs:
           # O caminho do cache é relativo à raiz do repositório.
           cache-dependency-path: api-odonto/pom.xml
 
-      - name: Permitir execucao do Maven Wrapper
-        run: chmod +x mvnw
-
       - name: Executar testes e gerar o pacote
         env:
           DB_URL: ${{ secrets.DB_URL }}
           DB_USERNAME: ${{ secrets.DB_USERNAME }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
-        run: ./mvnw --batch-mode clean verify
+        run: mvn --batch-mode clean verify
 
       - name: Validar a imagem Docker
-        run: docker build -t agendamento-odontologico:${{ github.sha }} .
+        run: docker build -t agendamento-odontologico:${{ github.sha }} -f ../Dockerfile .
